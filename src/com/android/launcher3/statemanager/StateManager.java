@@ -62,6 +62,8 @@ public class StateManager<STATE_TYPE extends BaseState<STATE_TYPE>> {
 
     private STATE_TYPE mRestState;
 
+    private boolean mAppClosing;
+
     public StateManager(StatefulActivity<STATE_TYPE> l, STATE_TYPE baseState) {
         mUiHandler = new Handler(Looper.getMainLooper());
         mActivity = l;
@@ -76,6 +78,10 @@ public class StateManager<STATE_TYPE extends BaseState<STATE_TYPE>> {
 
     public STATE_TYPE getCurrentStableState() {
         return mCurrentStableState;
+    }
+
+    public boolean isAppClosing() {
+        return mAppClosing;
     }
 
     public void dump(String prefix, PrintWriter writer) {
@@ -175,6 +181,10 @@ public class StateManager<STATE_TYPE extends BaseState<STATE_TYPE>> {
                 onStateTransitionEnd(mState);
             }
         }
+    }
+
+    public void setAppClosing(boolean state) {
+        mAppClosing = state;
     }
 
     private void goToState(STATE_TYPE state, boolean animated, long delay,
@@ -349,6 +359,7 @@ public class StateManager<STATE_TYPE extends BaseState<STATE_TYPE>> {
         if (state != mCurrentStableState) {
             mLastStableState = state.getHistoryForState(mCurrentStableState);
             mCurrentStableState = state;
+            setAppClosing(false);
         }
 
         mActivity.onStateSetEnd(state);

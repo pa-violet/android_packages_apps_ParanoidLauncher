@@ -131,6 +131,7 @@ public class LauncherSwipeHandlerV2 extends
             // Return an empty APC here since we have an non-user controlled animation
             // to home.
             long accuracy = 2 * Math.max(mDp.widthPx, mDp.heightPx);
+            mActivity.getStateManager().setAppClosing(true);
             return mActivity.getStateManager().createAnimationToNewWorkspace(
                     NORMAL, accuracy, 0 /* animComponents */);
         }
